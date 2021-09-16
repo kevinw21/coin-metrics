@@ -13,6 +13,8 @@ import com.sullivankw.CoinMetrics.domain.Exchanges.ExchangesTickersById;
 import com.sullivankw.CoinMetrics.domain.Global.Global;
 import com.sullivankw.CoinMetrics.domain.Ping;
 import com.sullivankw.CoinMetrics.domain.Status.StatusUpdates;
+import com.sullivankw.CoinMetrics.dto.gecko.CoinMarkets;
+import com.sullivankw.CoinMetrics.dto.gecko.MarketChart;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,8 @@ public interface CoinGeckoApiClient {
 
     List<CoinMarkets> getCoinMarkets(String vsCurrency);
 
+    List<CoinMarkets> getCoinMarkets(int items, int startingPage);
+
     List<CoinMarkets> getCoinMarkets(String vsCurrency, String ids, String order, Integer perPage, Integer page, boolean sparkline, String priceChangePercentage);
 
     CoinFullData getCoinById(String id);
@@ -50,7 +54,7 @@ public interface CoinGeckoApiClient {
 
     CoinHistoryById getCoinHistoryById(String id, String data, boolean localization);
 
-    MarketChart getCoinMarketChartById(String id, String vsCurrency, Integer days);
+    MarketChart getCoinMarketChartById(String id, String vsCurrency, Integer days, String interval);
 
     MarketChart getCoinMarketChartRangeById(String id, String vsCurrency, String from, String to);
 

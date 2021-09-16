@@ -12,6 +12,8 @@ import com.sullivankw.CoinMetrics.domain.Exchanges.ExchangesList;
 import com.sullivankw.CoinMetrics.domain.Exchanges.ExchangesTickersById;
 import com.sullivankw.CoinMetrics.domain.Global.Global;
 import com.sullivankw.CoinMetrics.domain.Status.StatusUpdates;
+import com.sullivankw.CoinMetrics.dto.gecko.CoinMarkets;
+import com.sullivankw.CoinMetrics.dto.gecko.MarketChart;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -65,7 +67,7 @@ public interface CoinGeckoApiService {
 
     @GET("coins/{id}/market_chart")
     Call<MarketChart> getCoinMarketChartById(@Path("id") String id, @Query("vs_currency") String vsCurrency,
-                                             @Query("days") Integer days);
+                                             @Query("days") Integer days, @Query("interval") String interval);
 
     @GET("coins/{id}/market_chart/range")
     Call<MarketChart> getCoinMarketChartRangeById(@Path("id") String id, @Query("vs_currency") String vsCurrency,

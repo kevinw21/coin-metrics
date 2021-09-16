@@ -15,6 +15,8 @@ import com.sullivankw.CoinMetrics.domain.Exchanges.ExchangesTickersById;
 import com.sullivankw.CoinMetrics.domain.Global.Global;
 import com.sullivankw.CoinMetrics.domain.Ping;
 import com.sullivankw.CoinMetrics.domain.Status.StatusUpdates;
+import com.sullivankw.CoinMetrics.dto.gecko.CoinMarkets;
+import com.sullivankw.CoinMetrics.dto.gecko.MarketChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +70,12 @@ public class CoinGeckoApiClientImpl implements CoinGeckoApiClient{
 
     @Override
     public List<CoinMarkets> getCoinMarkets(String vsCurrency) {
-        return getCoinMarkets(vsCurrency,null,null,200,2,false,null);
+        return getCoinMarkets(vsCurrency,null,null,200,1,false,null);
+    }
+
+    @Override
+    public List<CoinMarkets> getCoinMarkets(int items, int startingPage) {
+        return getCoinMarkets("usd",null,null, items, startingPage,false,null);
     }
 
     @Override
@@ -107,8 +114,8 @@ public class CoinGeckoApiClientImpl implements CoinGeckoApiClient{
     }
 
     @Override
-    public MarketChart getCoinMarketChartById(String id, String vsCurrency, Integer days) {
-        return coinGeckoApi.executeSync(coinGeckoApiService.getCoinMarketChartById(id,vsCurrency,days));
+    public MarketChart getCoinMarketChartById(String id, String vsCurrency, Integer days, String interval) {
+        return coinGeckoApi.executeSync(coinGeckoApiService.getCoinMarketChartById(id, vsCurrency, days, interval));
     }
 
     @Override

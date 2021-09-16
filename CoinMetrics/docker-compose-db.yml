@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  postgresql_coins:
+    image: mdillon/postgis:10-alpine
+    container_name: "postgresql_coins"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "sullivankw"
+    volumes:
+      - db-data-postgresql_coins:/var/lib/postgresql/data
+    ports:
+      - "29029:5432"
+volumes:
+  db-data-postgresql_coins:

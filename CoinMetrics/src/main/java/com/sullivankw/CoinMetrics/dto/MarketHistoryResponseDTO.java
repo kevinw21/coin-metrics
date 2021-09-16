@@ -13,8 +13,10 @@ public class MarketHistoryResponseDTO {
     @ApiModelProperty
     private String name;
 
+    @ApiModelProperty
     private Double currentPrice;
 
+    @ApiModelProperty
     private String date;
 
     public String getId() {
