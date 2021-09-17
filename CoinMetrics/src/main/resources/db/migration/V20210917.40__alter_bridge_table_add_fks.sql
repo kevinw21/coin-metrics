@@ -1,0 +1,5 @@
+alter table market_chart_parent_entity_children add constraint fk_parent foreign key
+(market_chart_parent_uuid) references market_chart_parent_entity;
+
+alter table market_chart_parent_entity_children add constraint fk_child foreign key
+(children_uuid) references market_chart_child_entity;

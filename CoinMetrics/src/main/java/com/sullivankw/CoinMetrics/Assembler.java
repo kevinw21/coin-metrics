@@ -8,7 +8,8 @@ import com.sullivankw.CoinMetrics.dto.gecko.CoinMarkets;
 import com.sullivankw.CoinMetrics.dto.CoinMarketResponseDTO;
 import com.sullivankw.CoinMetrics.dto.MarketHistoryResponseDTO;
 import com.sullivankw.CoinMetrics.entity.CoinMarketEntity;
-import com.sullivankw.CoinMetrics.entity.MarketChartEntity;
+import com.sullivankw.CoinMetrics.entity.MarketChartChildEntity;
+import com.sullivankw.CoinMetrics.entity.MarketChartParentEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,6 @@ public class Assembler {
                                                                          MarketChart marketChart) {
         List<MarketChartResponseDTO> marketChartResponseDTOs = new ArrayList<>();
         // final item in array is current
-        //should i reverse it?
         for (int i = 0; i < marketChart.getPrices().size(); i ++) {
             MarketChartResponseDTO responseDTO = new MarketChartResponseDTO();
             setTimestamps(marketChart, i, responseDTO);
@@ -63,16 +63,17 @@ public class Assembler {
                 .collect(Collectors.toList());
     }
 
-    public List<MarketChartEntity> toMarketChartEntityList(MarketChartResponseWrapperDTO wrapperDTO) {
-        return wrapperDTO.getMarketData().stream()
-                .map(item -> toMarketChartEntity(wrapperDTO.getCoinGeckoId(), item))
-                .collect(Collectors.toList());
+    public MarketChartParentEntity toMarketChartParentEntity(MarketChartResponseWrapperDTO wrapperDTO) {
+        MarketChartParentEntity parentEntity = new MarketChartParentEntity();
+        parentEntity.setCoinGeckoId(wrapperDTO.getCoinGeckoId());
+        parentEntity.setChildren(wrapperDTO.getMarketData().stream()
+                .map(this::toMarketChartChildEntity)
+                .collect(Collectors.toList()));
+        return parentEntity;
     }
 
-    private MarketChartEntity toMarketChartEntity(String coinGeckoId, MarketChartResponseDTO item) {
-        MarketChartEntity entity = modelMapper.map(item, MarketChartEntity.class);
-        entity.setCoinGeckoId(coinGeckoId);
-        return entity;
+    private MarketChartChildEntity toMarketChartChildEntity(MarketChartResponseDTO item) {
+        return modelMapper.map(item, MarketChartChildEntity.class);
     }
 
     private CoinMarketEntity toCoinMarketEntity(CoinMarkets coin) {

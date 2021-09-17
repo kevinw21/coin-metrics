@@ -24,11 +24,11 @@ public class MarketHistoryService {
     @Autowired
     private MarketChartRepo marketChartRepo;
 
-//    public List<MarketChartResponseWrapperDTO> getDailyCoinHistory(String coinGeckoId, int days) {
+//    public List<MarketChartResponseWrapperDTO> getCoinHistory(String coinGeckoId, int days) {
 //        List<String> coinGeckoIds = coinMarketRepo.findAllByMarketCapBetweenMinAndMax(390l, 400l); //need to make these constants as a mpa
-//        List<MarketChart> charts = new ArrayList<>(); //todo should be list of maps to i can stick the coinid
+//        List<MarketChart> charts = new ArrayList<>(); //todo.md should be list of maps to i can stick the coinid
 //        List<MarketChartResponseWrapperDTO> reponseWrapper = new ArrayList<>();
-//        for (String id : coinGeckoIds) { // todo should i pass em in
+//        for (String id : coinGeckoIds) { // todo.md should i pass em in
 //            //50 calls per min max
 //            MarketChart marketChart = client
 //                    .getCoinMarketChartById(id, "usd", days, "daily");
@@ -41,13 +41,17 @@ public class MarketHistoryService {
 //    }
 
 
-    public MarketChartResponseWrapperDTO getDailyCoinHistory(String coinGeckoId, int days) {
+    public MarketChartResponseWrapperDTO getCoinHistory(String coinGeckoId, int days) {
         MarketChart marketChart = client
                 .getCoinMarketChartById(coinGeckoId, "usd", days, "daily");
         MarketChartResponseWrapperDTO wrapperDTO = assembler
                 .toMarketChartResponseWrapperDTO(coinGeckoId, marketChart);
-        marketChartRepo.saveAll(assembler.toMarketChartEntityList(wrapperDTO));
+        marketChartRepo.save(assembler.toMarketChartParentEntity(wrapperDTO));
         return wrapperDTO;
+
+        //todo.md new idea, i could collect this data for the past 360 days for the top 400 coins today
+        //i get the market cap but not the rank, i could simply calculate the ranking,
+        //big processing tho and we are rate limited...
 
     }
 }

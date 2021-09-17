@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value="/history")
 public class MarketHistoryController {
@@ -30,19 +28,18 @@ public class MarketHistoryController {
     @GetMapping("/givenDay")
     @ApiOperation(value = "Get price info for given day and token")
     @ResponseStatus(HttpStatus.OK)
-    public MarketHistoryResponseDTO getCoinHistoryById(@ApiParam("date format = 01-09-2021") @RequestParam String date,
-                                                       @RequestParam String cryptoId) {
+    public MarketHistoryResponseDTO getCoinHistoryOnGivenDay(@ApiParam("date format = 01-09-2021") @RequestParam String date,
+                                                             @RequestParam String cryptoId) {
         CoinHistoryById history =  client
                 .getCoinHistoryById(cryptoId, date, false);
         return assembler.toMarketHistoryResponseDTO(history, date);
     }
 
-    //****prolly the best one to do what im after
     @GetMapping
     @ApiOperation(value = "Get the market cap and price for given token over some given number of days in the past")
     @ResponseStatus(HttpStatus.OK)
-    public MarketChartResponseWrapperDTO getDailyCoinHistory(@RequestParam String cryptoId, int totalDays) {
-        return marketHistoryService.getDailyCoinHistory(cryptoId, totalDays);
+    public MarketChartResponseWrapperDTO getCoinHistoryForPastGivenDays(@RequestParam String cryptoId, int totalDays) {
+        return marketHistoryService.getCoinHistory(cryptoId, totalDays);
     }
 
 }
