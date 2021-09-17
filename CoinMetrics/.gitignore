@@ -1,0 +1,38 @@
+.env
+__pycache__
+docker-compose.yaml
+dot_docker
+uploaded-files
+Pipfile
+Pipfile.lock
+
+target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### personal config ###
+*.personal
+*-personal.properties
+
+### Mac ###
+.DS_Store
