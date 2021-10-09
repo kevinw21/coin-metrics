@@ -1,12 +1,12 @@
-# Getting Started
+# READ ME
 
 ### Reference Documentation
-For further reference, please consider the following sections:
+This service is meant to be deployed and ran on a schedule or launched and updated as needed by calling to get the latest
+price info and save in CoinMarketController. Note that there are API limits do to constraints on Coin Gecko api usage.
+Check https://www.coingecko.com/en/api for the latest.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/maven-plugin/)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/htmlsingle/#boot-features-jpa-and-spring-data)
+
+
 
 ### Useful queries
 select * from market_chart_parent_entity_children bridge

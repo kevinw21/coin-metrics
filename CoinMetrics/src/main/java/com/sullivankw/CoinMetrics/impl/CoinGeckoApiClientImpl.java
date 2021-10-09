@@ -32,7 +32,6 @@ public class CoinGeckoApiClientImpl implements CoinGeckoApiClient{
     @Autowired
     private CoinGeckoApi coinGeckoApi;
 
-
     @Override
     public Ping ping(){
         return coinGeckoApi.executeSync(coinGeckoApiService.ping());

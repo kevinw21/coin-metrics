@@ -38,8 +38,16 @@ public class MarketHistoryController {
     @GetMapping
     @ApiOperation(value = "Get the market cap and price for given token over some given number of days in the past")
     @ResponseStatus(HttpStatus.OK)
-    public MarketChartResponseWrapperDTO getCoinHistoryForPastGivenDays(@RequestParam String cryptoId, int totalDays) {
+    public MarketChartResponseWrapperDTO getCoinHistoryForPastGivenDays(@RequestParam String cryptoId, @RequestParam int totalDays) {
         return marketHistoryService.getCoinHistory(cryptoId, totalDays);
+    }
+
+    @PutMapping("/(uuid)")
+    @ApiOperation(value = "Replace the coin history for some new number of totalDays")
+    @ResponseStatus(HttpStatus.OK)
+    public MarketChartResponseWrapperDTO updateCoinHistory(@PathVariable String uuid, @RequestParam int totalDays) {
+        return null;
+        //todo
     }
 
 }

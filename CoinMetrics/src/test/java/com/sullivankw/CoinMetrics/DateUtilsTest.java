@@ -1,6 +1,5 @@
-package com.sullivankw.NBAWinTotalsPredictor;
+package com.sullivankw.CoinMetrics;
 
-import com.sullivankw.CoinMetrics.DateUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

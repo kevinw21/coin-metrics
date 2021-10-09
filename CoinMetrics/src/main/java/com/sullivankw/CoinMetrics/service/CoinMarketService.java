@@ -25,17 +25,26 @@ public class CoinMarketService {
     @Autowired
     private CoinMarketRepo coinMarketRepo;
 
-    public List<CoinMarketResponseDTO> getAndSaveCoinMarketData() {
-        List<CoinMarkets> coinMarkets =  getBasicCoinMarketData();
-        List<CoinMarketEntity> entities = assembler.toCoinMarketEntityList(coinMarkets);
-        coinMarketRepo.saveAll(entities);
-        return assembler.toCoinMarketResponseDTO(entities);
+    public List<CoinMarketResponseDTO> getCoinMarketData(boolean saveData) {
+        List<CoinMarkets> coinMarkets =  getCoinMarketData();
+        if (saveData) {
+            return save(coinMarkets);
+        } else {
+            return assembler.toCoinMarketResponseDTO(coinMarkets);
+        }
     }
 
-    public List<CoinMarkets> getBasicCoinMarketData() {
+    private List<CoinMarkets> getCoinMarketData() {
         List<CoinMarkets> first200 = client.getCoinMarkets(200, 1);
         List<CoinMarkets> next200 = client.getCoinMarkets(200, 2);
         return Stream.concat(first200.stream(), next200.stream())
                 .collect(Collectors.toList());
+    }
+
+
+    private List<CoinMarketResponseDTO> save(List<CoinMarkets> coinMarkets) {
+        List<CoinMarketEntity> entities = assembler.toCoinMarketEntityList(coinMarkets);
+        coinMarketRepo.saveAll(entities);
+        return assembler.toCoinMarketResponse(entities);
     }
 }

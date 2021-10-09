@@ -32,8 +32,14 @@ public class Assembler {
         return dto;
     }
 
-    public List<CoinMarketResponseDTO> toCoinMarketResponseDTO(List<CoinMarketEntity> coinMarketEntities) {
+    public List<CoinMarketResponseDTO> toCoinMarketResponse(List<CoinMarketEntity> coinMarketEntities) {
         return coinMarketEntities.stream()
+                .map(this::toCoinMarketResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoinMarketResponseDTO> toCoinMarketResponseDTO(List<CoinMarkets> coinMarkets) {
+        return coinMarkets.stream()
                 .map(this::toCoinMarketResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -82,6 +88,10 @@ public class Assembler {
 
     private CoinMarketResponseDTO toCoinMarketResponseDTO(CoinMarketEntity entity) {
         return modelMapper.map(entity, CoinMarketResponseDTO.class);
+    }
+
+    private CoinMarketResponseDTO toCoinMarketResponseDTO(CoinMarkets coin) {
+        return modelMapper.map(coin, CoinMarketResponseDTO.class); //todo mapper
     }
 
     private void setTimestamps(MarketChart marketChart, int position, MarketChartResponseDTO responseDTO) {
