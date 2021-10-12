@@ -22,7 +22,7 @@ public class DataSourceForTest {
 
     @Bean
     @Primary
-    public static DataSource dataSource() throws Throwable {
+    public static DataSource dataSource() {
         POSTGRE_SQL_CONTAINER.start();
         setDataSourceProperties();
         return DATA_SOURCE;

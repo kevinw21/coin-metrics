@@ -18,11 +18,12 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.with;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -44,10 +45,14 @@ public class CoinMarketControllerIntegrationTest {
 	@LocalServerPort
 	private int serverPort;
 
+	private static final String PATH = "/coinMetrics/currentMarket";
+
 	@BeforeEach
 	public void setup() {
 		RestAssured.port = serverPort;
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+		mockApiCalls();
 	}
 
 	@AfterEach
@@ -56,24 +61,26 @@ public class CoinMarketControllerIntegrationTest {
 	}
 
 	@Nested
-	class getTests {
+	class getCurrentCoinMarketDataTests {
 		@Test
 		public void testGetCurrentCoinMarketData_withSaveDataOmitted_happyPath() {
 			with().contentType(JSON)
 					.expect().statusCode(200)
-					.and().body("error", is(equalTo("value")))
-					.when().get("/currentMarket");
+					.and().body("content", hasSize(equalTo(400)))
+					.when().get(PATH);
+
+			assertEquals(0, coinMarketRepo.findAll().spliterator().getExactSizeIfKnown());
 		}
 
 		@Test
 		public void testGetCurrentCoinMarketData_withSaveDataFalse_happyPath() {
-			mockApiCalls();
-
 			with().contentType(JSON)
 					.queryParam("saveData", false)
 					.expect().statusCode(200)
-					.and().body("error", is(equalTo("value")))
-					.when().get("/currentMarket");
+					.and().body("content", hasSize(equalTo(400)))
+					.when().get(PATH);
+
+			assertEquals(0, coinMarketRepo.findAll().spliterator().getExactSizeIfKnown());
 		}
 
 		@Test
@@ -81,17 +88,35 @@ public class CoinMarketControllerIntegrationTest {
 			with().contentType(JSON)
 					.queryParam("saveData", true)
 					.expect().statusCode(200)
-					.and().body("error", is(equalTo("value")))
-					.when().get("/currentMarket");
+					.and().body("content", hasSize(equalTo(400)))
+					.when().get(PATH);
+
+			assertEquals(400, coinMarketRepo.findAll().spliterator().getExactSizeIfKnown());
 		}
 	}
 
 	private void mockApiCalls() {
-		List<CoinMarkets> first200 = new ArrayList<>();
-		List<CoinMarkets> next200 = new ArrayList<>();
-
+		List<CoinMarkets> first200 = createCoinMarketResponse(1, 200);
+		List<CoinMarkets> next200 = createCoinMarketResponse(201, 400);
 
 		doReturn(first200).when(mockApiClient).getCoinMarkets(200, 1);
 		doReturn(next200).when(mockApiClient).getCoinMarkets(200, 2);
+	}
+
+	private List<CoinMarkets> createCoinMarketResponse(int start, int end) {
+		List<CoinMarkets> markets = new ArrayList<>();
+		long marketCap = end;
+		for (int i = start; i <= end; i++) {
+			CoinMarkets market = new CoinMarkets();
+			market.setId(UUID.randomUUID().toString());
+			market.setCurrentPrice(9.99d);
+			market.setMarketCap(99);
+			market.setMarketCapRank(i);
+			market.setName("name " + i);
+			market.setSymbol("symbol " + i);
+			marketCap = marketCap - 1;
+			markets.add(market);
+		}
+		return markets;
 	}
 }
