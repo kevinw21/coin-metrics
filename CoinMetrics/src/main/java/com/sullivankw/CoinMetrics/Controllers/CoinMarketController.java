@@ -1,5 +1,6 @@
 package com.sullivankw.CoinMetrics.Controllers;
 
+import com.sullivankw.CoinMetrics.ContentWrapper;
 import com.sullivankw.CoinMetrics.dto.CoinMarketResponseDTO;
 import com.sullivankw.CoinMetrics.service.CoinMarketService;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +20,7 @@ public class CoinMarketController {
     @ApiOperation(value = "Use this to get all latest market info for the top 400 in coin gecko. Optionally, the data can be persisted through param saveData")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CoinMarketResponseDTO> getAndSaveCoinMarkets(@RequestParam(required = false) boolean saveData) {
-        return coinMarketService.getCoinMarketData(saveData);
+    public ContentWrapper<List<CoinMarketResponseDTO>> getCurrentCoinMarketData(@RequestParam(required = false) boolean saveData) {
+        return ContentWrapper.wrap(coinMarketService.getCoinMarketData(saveData));
     }
 }
